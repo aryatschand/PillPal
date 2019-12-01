@@ -9,8 +9,74 @@
 import UIKit
 import CoreBluetooth
 import QuartzCore
+import Firebase
+import LocalAuthentication
 
-class PatientVC: UIViewController, BluetoothSerialDelegate {
+
+class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    override func viewWillAppear(_ animated: Bool) {
+        SendBtn.isEnabled = false
+        SendBtn.isHidden = true
+    }
+    
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return nameArray.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return nameArray[row]
+    }
+    
+    @IBOutlet weak var PickerView: UIPickerView!
+    
+    var nameArray = ["Arya", "Albert", "Eli", "Sai"]
+    var ref: DatabaseReference!
+    var redPositions: [Int] = []
+    var bluePositions: [Int] = []
+    
+    var verified = false
+    
+    var selectedName = ""
+    
+    func checkVerified(CompletionHandler: @escaping (Bool?, Error?) -> Void){
+           do {
+               let url = NSURL(string: "https://h2grow.herokuapp.com/api")!
+               let request = NSMutableURLRequest(url: url as URL)
+               request.httpMethod = "POST"
+               
+               request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+               request.httpBody = try JSONSerialization.data(withJSONObject: [""], options: .prettyPrinted)
+               let task = URLSession.shared.dataTask(with: request as URLRequest){ data, response, error in
+                   
+                   self.ref.child("Requests").child("Arya").child("Doctors").observeSingleEvent(of: .value, with: { (snapshot) in
+                       
+                       // Get user value
+                       
+                       let value = snapshot.value as? NSDictionary
+                       
+                       for (key, values) in value! {
+
+                           if values as! Bool == true {
+                            self.verified = true
+                           }
+                       }
+                       CompletionHandler(true,nil)
+                   })
+    
+                   
+               }
+               task.resume()
+           } catch {
+               print(error)
+           }
+       }
+    
+    
     func textViewScrollToBottom() {
         //let range = NSMakeRange(NSString(string: mainTextView.text).length - 1, 1)
         //mainTextView.scrollRangeToVisible(range)
@@ -34,17 +100,90 @@ class PatientVC: UIViewController, BluetoothSerialDelegate {
         }
     }
     
-    
-    @IBAction func SendInfo(_ sender: Any) {
-        serial.sendMessageToDevice("1000")
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        selectedName = nameArray[row]
     }
     
     
-    @IBOutlet weak var ConnectBtn: UIButton!
+    @IBAction func SendInfo(_ sender: Any) {
+        //serial.sendMessageToDevice("1600,Arya,Blue")
+        
+        print("hello there!.. You have clicked the touch ID")
+        
+        let myContext = LAContext()
+        let myLocalizedReasonString = "Biometric Authntication testing !! "
+        
+        var authError: NSError?
+        if #available(iOS 8.0, macOS 10.12.1, *) {
+            if myContext.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &authError) {
+                myContext.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: myLocalizedReasonString) { success, evaluateError in
+                    
+                    DispatchQueue.main.async {
+                        if success {
+                            // User authenticated successfully, take appropriate action
+                            self.ref.child("Requests").child(self.selectedName).child("Requested").setValue(true)
+                        } else {
+                            // User did not authenticate successfully, look at error and take appropriate action
+                            print("Sorry!!... User did not authenticate successfully")
+                        }
+                    }
+                }
+            } else {
+                // Could not evaluate policy; look at authError and present an appropriate message to user
+                print("Sorry!!.. Could not evaluate policy.")
+            }
+        } else {
+            // Fallback on earlier versions
+            
+            print("Ooops!!.. This feature is not supported.")
+        }
+    }
+    
+    @IBOutlet weak var SendBtn: UIButton!
+    
+    @IBOutlet weak var Connect: UIBarButtonItem!
+    
+    func loadArrays() {
+        
+        self.ref.child("Positions").child("Red").observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            // Get user value
+            
+            let value = snapshot.value as? NSDictionary
+            
+            for (key, values) in value! {
+                if values as! Bool == true{
+                    var str = key as! String
+                    var lastInt = Int(String(str[str.index(before: str.endIndex)]))
+                    self.redPositions.append(lastInt!)
+                }
+            }
+        })
+            
+            self.ref.child("Positions").child("Blue").observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            // Get user value
+            
+            let value = snapshot.value as? NSDictionary
+            
+            for (key, values) in value! {
+                if values as! Bool == true{
+                    var str = key as! String
+                    var lastInt = Int(String(str[str.index(before: str.endIndex)]))
+                    self.bluePositions.append(lastInt!)
+                }
+            }
+        })
+        
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        ref = Database.database().reference()
         serial = BluetoothSerial(delegate: self)
+        loadArrays()
+        self.PickerView.delegate = self
+        self.PickerView.dataSource = self
         
         // UI
         //mainTextView.text = ""
@@ -52,8 +191,8 @@ class PatientVC: UIViewController, BluetoothSerialDelegate {
         
         NotificationCenter.default.addObserver(self, selector: #selector(PatientVC.reloadView), name: NSNotification.Name(rawValue: "reloadStartViewController"), object: nil)
     }
-
-    @IBAction func ConnectButton(_ sender: Any) {
+    
+    @IBAction func ConnectBtn(_ sender: Any) {
         if serial.connectedPeripheral == nil {
             performSegue(withIdentifier: "ShowScanner", sender: self)
         } else {
@@ -62,52 +201,32 @@ class PatientVC: UIViewController, BluetoothSerialDelegate {
         }
     }
     
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
     
-    func printMessagesForUser(parameters: String, CompletionHandler: @escaping (Bool?, Error?) -> Void){
-        let json = [parameters]
-        print(json)
-        do {
-            let jsonData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
-            
-            
-            let url = NSURL(string: "https://h2grow.herokuapp.com/api")!
-            let request = NSMutableURLRequest(url: url as URL)
-            request.httpMethod = "POST"
-            
-            request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
-            request.httpBody = jsonData
-            
-            let task = URLSession.shared.dataTask(with: request as URLRequest){ data, response, error in
-                if String(data: data!, encoding: .utf8) != nil {
-                    //global data string 123
-                    CompletionHandler(true,nil)
-                    
-                    //self.Severity.text = "hello"
-                } else {
-                }
-                
-                //self.Severity.text = "test"
-                
-            }
-            task.resume()
-        } catch {
-            
-            print(error)
-        }
-    }
     
-    func serialDidReceiveString(_ message: String) {
-        print(message)
-        _ = message.components(separatedBy: ",")
-        printMessagesForUser(parameters: message) {
+    @IBAction func Refresh(_ sender: Any) {
+        checkVerified() {
             (returnval, error) in
             if (returnval)!
             {
                 DispatchQueue.main.async {
-                    //Do Stuff
+                    if self.verified == true {
+                        var pillName = ""
+                        var position = 0
+                        if self.selectedName == "Arya" {
+                            pillName = "Blue"
+                            if self.bluePositions.count > 0{
+                                position = self.bluePositions[0]
+                                self.bluePositions.remove(at: 0)
+                            }
+                        } else {
+                            pillName = "Red"
+                            if self.redPositions.count > 0{
+                                position = self.redPositions[0]
+                                self.redPositions.remove(at: 0)
+                            }
+                        }
+                        serial.sendMessageToDevice("\(position),\(self.selectedName),\(pillName)")
+                    }
                 }
             } else {
                 print(error)
@@ -115,27 +234,64 @@ class PatientVC: UIViewController, BluetoothSerialDelegate {
         }
         DispatchQueue.main.async { // Correct
         }
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    /*
+    func newWord(CompletionHandler: @escaping (Bool?, Error?) -> Void){
+        do {
+            let url = NSURL(string: "https://h2grow.herokuapp.com/api")!
+            let request = NSMutableURLRequest(url: url as URL)
+            request.httpMethod = "POST"
+            
+            request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try JSONSerialization.data(withJSONObject: [""], options: .prettyPrinted)
+            let task = URLSession.shared.dataTask(with: request as URLRequest){ data, response, error in
+                randomNumberIndex = Int.random(in: 1 ..< 4)
+                ref.child("\(randomNumberIndex)").observeSingleEvent(of: .value, with: { (snapshot) in
+                    
+                    let value = snapshot.value as? NSDictionary
+                    word = value!["Word"] as! String
+                    definition = value!["Definition" ] as! String
+                    CompletionHandler(true,nil)
+                    
+                })
+                
+            }
+            task.resume()
+        } catch {
+            print(error)
+        }
+    } */
+    
+    func serialDidReceiveString(_ message: String) {
+        print(message)
+        if message == "pill" {
+            SendBtn.isEnabled = true
+            SendBtn.isHidden = false
+        }
         
     }
     
     @objc func reloadView() {
         // in case we're the visible view again
-        serial.delegate = self
-        
         if serial.isReady {
-            ConnectBtn.titleLabel!.text = "Disconnect"
-            ConnectBtn.tintColor = UIColor.red
-            ConnectBtn.isEnabled = true
+            Connect.title = "Disconnect"
+            Connect.tintColor = UIColor.red
+            Connect.isEnabled = true
             serial.sendMessageToDevice("initialize")
         } else if serial.centralManager.state == .poweredOn {
-            ConnectBtn.titleLabel!.text = "Connect"
-            ConnectBtn.tintColor = view.tintColor
-            ConnectBtn.isEnabled = true
+            Connect.title = "Connect"
+            Connect.tintColor = view.tintColor
+            Connect.isEnabled = true
             serial.sendMessageToDevice("DISCONNECT")
         } else {
-            ConnectBtn.titleLabel!.text = "Connect"
-            ConnectBtn.tintColor = view.tintColor
-            ConnectBtn.isEnabled = false
+            Connect.title = "Connect"
+            Connect.tintColor = view.tintColor
+            Connect.isEnabled = false
             serial.sendMessageToDevice("DISCONNECT")
         }
     }

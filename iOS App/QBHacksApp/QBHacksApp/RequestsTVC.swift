@@ -7,19 +7,76 @@
 //
 
 import UIKit
+import Firebase
 
 class RequestsTVC: UITableViewController {
     
-    var labels: [String] = ["hello", "arya", "tschand"]
-
+    var labels: [String] = []
+    var names: [String]  = []
+    var pills: [String] = []
+    var ref: DatabaseReference!
+    
+    @IBOutlet weak var RefreshBtn: UIBarButtonItem!
+    
+    @IBAction func RefreshClick(_ sender: Any) {
+        refreshScreen()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        ref = Database.database().reference()
+        refreshScreen()
+    }
+    
+    func refreshScreen() {
+        getData() {
+            (returnval, error) in
+            if (returnval)!
+            {
+                DispatchQueue.main.async {
+                }
+            } else {
+                print(error)
+            }
+        }
+        DispatchQueue.main.async { // Correct
+        }
+        tableView.reloadData()
+    }
+    
+    func getData(CompletionHandler: @escaping (Bool?, Error?) -> Void){
+        do {
+            let url = NSURL(string: "https://h2grow.herokuapp.com/api")!
+            let request = NSMutableURLRequest(url: url as URL)
+            request.httpMethod = "POST"
+            
+            request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
+            request.httpBody = try JSONSerialization.data(withJSONObject: [""], options: .prettyPrinted)
+            let task = URLSession.shared.dataTask(with: request as URLRequest){ data, response, error in
+                
+                self.ref.child("Requests").observeSingleEvent(of: .value, with: { (snapshot) in
+                    
+                    let value = snapshot.value as? NSDictionary
+                    for (key, values) in value! {
+                        var verify = (values as! NSDictionary)["Requested"] as! Bool
+                        if verify == true && self.names.contains(key as! String) == false{
+                            var name = key as! String
+                            var pill = (values as! NSDictionary)["Type"] as! String
+                            self.names.append(name)
+                            self.pills.append(pill)
+                            self.labels.append("\(name) - \(pill)")
+                        }
+                    }
+                    CompletionHandler(true,nil)
+                    
+                })
+ 
+                
+            }
+            task.resume()
+        } catch {
+            print(error)
+        }
     }
 
     // MARK: - Table view data source
@@ -31,7 +88,7 @@ class RequestsTVC: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 3
+        return labels.count
     }
 
     
@@ -41,6 +98,8 @@ class RequestsTVC: UITableViewController {
         cell.textLabel?.text = labels[indexPath.row]
         return cell
     }
+    
+    
 
     /*
     // Override to support conditional editing of the table view.
@@ -77,14 +136,20 @@ class RequestsTVC: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "Select" {
+            let VerifyVC = segue.destination as! VerifyVC
+            var selectedIndexPath = tableView.indexPathForSelectedRow
+            VerifyVC.name = names[selectedIndexPath!.row]
+            VerifyVC.pill = pills[selectedIndexPath!.row]
+        }
     }
-    */
+    
 
 }

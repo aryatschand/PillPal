@@ -21,6 +21,7 @@
 		420941A8239425C900AB5051 /* RequestsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420941A7239425C900AB5051 /* RequestsTVC.swift */; };
 		420941AA239425DF00AB5051 /* VerifyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420941A9239425DF00AB5051 /* VerifyVC.swift */; };
 		420941AC2394278200AB5051 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 420941AB2394278100AB5051 /* GoogleService-Info.plist */; };
+		420941AE2394602700AB5051 /* imageIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 420941AD2394602700AB5051 /* imageIcon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		420941A7239425C900AB5051 /* RequestsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsTVC.swift; sourceTree = "<group>"; };
 		420941A9239425DF00AB5051 /* VerifyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyVC.swift; sourceTree = "<group>"; };
 		420941AB2394278100AB5051 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		420941AD2394602700AB5051 /* imageIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = imageIcon.png; sourceTree = "<group>"; };
 		8D640FD0351A68C9EB9987D4 /* Pods-QBHacksApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QBHacksApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QBHacksApp/Pods-QBHacksApp.debug.xcconfig"; sourceTree = "<group>"; };
 		F7EA9884B1C3CA7EEF92F246 /* Pods-QBHacksApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QBHacksApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-QBHacksApp/Pods-QBHacksApp.release.xcconfig"; sourceTree = "<group>"; };
 		F95703A5CE2C0C5D219D034D /* Pods_QBHacksApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QBHacksApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +81,7 @@
 		4209418823940E7F00AB5051 /* QBHacksApp */ = {
 			isa = PBXGroup;
 			children = (
+				420941AD2394602700AB5051 /* imageIcon.png */,
 				420941A323940FEA00AB5051 /* ScannerViewController.swift */,
 				4209419E23940FD400AB5051 /* BluetoothSerial.swift */,
 				420941A023940FD400AB5051 /* MBProgressHUD.h */,
@@ -179,6 +182,7 @@
 			files = (
 				4209419623940E8100AB5051 /* LaunchScreen.storyboard in Resources */,
 				420941AC2394278200AB5051 /* GoogleService-Info.plist in Resources */,
+				420941AE2394602700AB5051 /* imageIcon.png in Resources */,
 				4209419323940E8100AB5051 /* Assets.xcassets in Resources */,
 				4209419123940E7F00AB5051 /* Main.storyboard in Resources */,
 			);
