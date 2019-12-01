@@ -10,7 +10,7 @@ import UIKit
 import CoreBluetooth
 import QuartzCore
 
-class ViewController: UIViewController, BluetoothSerialDelegate {
+class PatientVC: UIViewController, BluetoothSerialDelegate {
     func textViewScrollToBottom() {
         //let range = NSMakeRange(NSString(string: mainTextView.text).length - 1, 1)
         //mainTextView.scrollRangeToVisible(range)
@@ -50,7 +50,7 @@ class ViewController: UIViewController, BluetoothSerialDelegate {
         //mainTextView.text = ""
         reloadView()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(ViewController.reloadView), name: NSNotification.Name(rawValue: "reloadStartViewController"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(PatientVC.reloadView), name: NSNotification.Name(rawValue: "reloadStartViewController"), object: nil)
     }
 
     @IBAction func ConnectButton(_ sender: Any) {

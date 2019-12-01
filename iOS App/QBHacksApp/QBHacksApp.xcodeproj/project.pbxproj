@@ -10,20 +10,24 @@
 		04D8EBA817424AD5C05F51C9 /* Pods_QBHacksApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F95703A5CE2C0C5D219D034D /* Pods_QBHacksApp.framework */; };
 		4209418A23940E7F00AB5051 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4209418923940E7F00AB5051 /* AppDelegate.swift */; };
 		4209418C23940E7F00AB5051 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4209418B23940E7F00AB5051 /* SceneDelegate.swift */; };
-		4209418E23940E7F00AB5051 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4209418D23940E7F00AB5051 /* ViewController.swift */; };
+		4209418E23940E7F00AB5051 /* PatientVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4209418D23940E7F00AB5051 /* PatientVC.swift */; };
 		4209419123940E7F00AB5051 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4209418F23940E7F00AB5051 /* Main.storyboard */; };
 		4209419323940E8100AB5051 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4209419223940E8100AB5051 /* Assets.xcassets */; };
 		4209419623940E8100AB5051 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4209419423940E8100AB5051 /* LaunchScreen.storyboard */; };
 		420941A123940FD400AB5051 /* BluetoothSerial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4209419E23940FD400AB5051 /* BluetoothSerial.swift */; };
 		420941A223940FD400AB5051 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 4209419F23940FD400AB5051 /* MBProgressHUD.m */; };
 		420941A423940FEA00AB5051 /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420941A323940FEA00AB5051 /* ScannerViewController.swift */; };
+		420941A6239424CC00AB5051 /* ChooseRoleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420941A5239424CC00AB5051 /* ChooseRoleVC.swift */; };
+		420941A8239425C900AB5051 /* RequestsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420941A7239425C900AB5051 /* RequestsTVC.swift */; };
+		420941AA239425DF00AB5051 /* VerifyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420941A9239425DF00AB5051 /* VerifyVC.swift */; };
+		420941AC2394278200AB5051 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 420941AB2394278100AB5051 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		4209418623940E7F00AB5051 /* PillPal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PillPal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4209418923940E7F00AB5051 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4209418B23940E7F00AB5051 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		4209418D23940E7F00AB5051 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		4209418D23940E7F00AB5051 /* PatientVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientVC.swift; sourceTree = "<group>"; };
 		4209419023940E7F00AB5051 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		4209419223940E8100AB5051 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4209419523940E8100AB5051 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -33,6 +37,10 @@
 		4209419F23940FD400AB5051 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		420941A023940FD400AB5051 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		420941A323940FEA00AB5051 /* ScannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
+		420941A5239424CC00AB5051 /* ChooseRoleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseRoleVC.swift; sourceTree = "<group>"; };
+		420941A7239425C900AB5051 /* RequestsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsTVC.swift; sourceTree = "<group>"; };
+		420941A9239425DF00AB5051 /* VerifyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyVC.swift; sourceTree = "<group>"; };
+		420941AB2394278100AB5051 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8D640FD0351A68C9EB9987D4 /* Pods-QBHacksApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QBHacksApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QBHacksApp/Pods-QBHacksApp.debug.xcconfig"; sourceTree = "<group>"; };
 		F7EA9884B1C3CA7EEF92F246 /* Pods-QBHacksApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QBHacksApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-QBHacksApp/Pods-QBHacksApp.release.xcconfig"; sourceTree = "<group>"; };
 		F95703A5CE2C0C5D219D034D /* Pods_QBHacksApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QBHacksApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -77,11 +85,15 @@
 				4209419F23940FD400AB5051 /* MBProgressHUD.m */,
 				4209418923940E7F00AB5051 /* AppDelegate.swift */,
 				4209418B23940E7F00AB5051 /* SceneDelegate.swift */,
-				4209418D23940E7F00AB5051 /* ViewController.swift */,
+				4209418D23940E7F00AB5051 /* PatientVC.swift */,
 				4209418F23940E7F00AB5051 /* Main.storyboard */,
+				420941A7239425C900AB5051 /* RequestsTVC.swift */,
+				420941A9239425DF00AB5051 /* VerifyVC.swift */,
+				420941A5239424CC00AB5051 /* ChooseRoleVC.swift */,
 				4209419223940E8100AB5051 /* Assets.xcassets */,
 				4209419423940E8100AB5051 /* LaunchScreen.storyboard */,
 				4209419723940E8100AB5051 /* Info.plist */,
+				420941AB2394278100AB5051 /* GoogleService-Info.plist */,
 				4209419D23940FD300AB5051 /* QBHacksApp-Bridging-Header.h */,
 			);
 			path = QBHacksApp;
@@ -166,6 +178,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4209419623940E8100AB5051 /* LaunchScreen.storyboard in Resources */,
+				420941AC2394278200AB5051 /* GoogleService-Info.plist in Resources */,
 				4209419323940E8100AB5051 /* Assets.xcassets in Resources */,
 				4209419123940E7F00AB5051 /* Main.storyboard in Resources */,
 			);
@@ -221,10 +234,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4209418E23940E7F00AB5051 /* ViewController.swift in Sources */,
+				4209418E23940E7F00AB5051 /* PatientVC.swift in Sources */,
 				420941A423940FEA00AB5051 /* ScannerViewController.swift in Sources */,
+				420941A6239424CC00AB5051 /* ChooseRoleVC.swift in Sources */,
 				4209418A23940E7F00AB5051 /* AppDelegate.swift in Sources */,
+				420941AA239425DF00AB5051 /* VerifyVC.swift in Sources */,
 				420941A223940FD400AB5051 /* MBProgressHUD.m in Sources */,
+				420941A8239425C900AB5051 /* RequestsTVC.swift in Sources */,
 				420941A123940FD400AB5051 /* BluetoothSerial.swift in Sources */,
 				4209418C23940E7F00AB5051 /* SceneDelegate.swift in Sources */,
 			);

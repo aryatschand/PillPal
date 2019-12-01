@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>957912266772-e133ka78vrn7dv9jfmqtlgijomdjcro6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.957912266772-e133ka78vrn7dv9jfmqtlgijomdjcro6</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCJ1NEuUpfPKGJmOiZn9GzfgYzW9U3Y2J0</string>
+	<key>GCM_SENDER_ID</key>
+	<string>957912266772</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>arya.QBHacksApp</string>
+	<key>PROJECT_ID</key>
+	<string>qbhacks-ff9af</string>
+	<key>STORAGE_BUCKET</key>
+	<string>qbhacks-ff9af.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:957912266772:ios:2fc1c152b9632bc6f54f01</string>
+	<key>DATABASE_URL</key>
+	<string>https://qbhacks-ff9af.firebaseio.com</string>
+</dict>
+</plist>
