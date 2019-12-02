@@ -15,11 +15,6 @@ import LocalAuthentication
 
 class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
     
-    override func viewWillAppear(_ animated: Bool) {
-        SendBtn.isEnabled = false
-        SendBtn.isHidden = true
-    }
-    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
     }
@@ -38,10 +33,11 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
     var ref: DatabaseReference!
     var redPositions: [Int] = []
     var bluePositions: [Int] = []
+    var doctors: [String] = []
     
     var verified = false
     
-    var selectedName = ""
+    var selectedName = "Arya"
     
     func checkVerified(CompletionHandler: @escaping (Bool?, Error?) -> Void){
            do {
@@ -60,6 +56,7 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
                        let value = snapshot.value as? NSDictionary
                        
                        for (key, values) in value! {
+                        self.doctors.append(key as! String)
 
                            if values as! Bool == true {
                             self.verified = true
@@ -105,10 +102,10 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
     }
     
     
+    @IBOutlet weak var StatusLabel: UILabel!
+    
     @IBAction func SendInfo(_ sender: Any) {
         //serial.sendMessageToDevice("1600,Arya,Blue")
-        
-        print("hello there!.. You have clicked the touch ID")
         
         let myContext = LAContext()
         let myLocalizedReasonString = "Biometric Authntication testing !! "
@@ -210,6 +207,7 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
             {
                 DispatchQueue.main.async {
                     if self.verified == true {
+                        self.StatusLabel.text = "Request Status - Accepted"
                         var pillName = ""
                         var position = 0
                         if self.selectedName == "Arya" {
@@ -225,7 +223,12 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
                                 self.redPositions.remove(at: 0)
                             }
                         }
-                        serial.sendMessageToDevice("\(position),\(self.selectedName),\(pillName)")
+                    serial.sendMessageToDevice("\(position),\(self.selectedName),\(pillName)")
+                    self.ref.child("Requests").child(self.selectedName).child("Requested").setValue(false)
+                        for x in 0...self.doctors.count-1{
+                            self.ref.child("Requests").child(self.selectedName).child("Doctors").child(self.doctors[x]).setValue(false)
+                        }
+                        
                     }
                 }
             } else {
@@ -266,15 +269,6 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
             print(error)
         }
     } */
-    
-    func serialDidReceiveString(_ message: String) {
-        print(message)
-        if message == "pill" {
-            SendBtn.isEnabled = true
-            SendBtn.isHidden = false
-        }
-        
-    }
     
     @objc func reloadView() {
         // in case we're the visible view again
