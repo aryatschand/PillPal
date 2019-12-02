@@ -8,6 +8,12 @@
 #include <LiquidCrystal.h> // includes the LiquidCrystal Library 
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7); // Creates an LC object. Parameters: (rs, enable, d4, d5, d6, d7) 
 
+#include <Servo.h>
+Servo myservo;
+
+int pos = 0;
+
+
 int dirpin = 22;
 int steppin = 23;
 
@@ -18,6 +24,12 @@ bool done = false;
 
 bool connected = false;
 
+const int trigPin = 9;
+const int echoPin = 10;
+
+long duration;
+int distanceCm, distanceInch;
+
 void setup() { 
   Serial3.begin(9600); 
   Serial.begin(9600);
@@ -26,34 +38,101 @@ void setup() {
   pinMode(dirpin, OUTPUT);
   pinMode(steppin, OUTPUT);
   Serial.println("wassup");
+
+  pinMode (trigPin, OUTPUT);
+  pinMode (echoPin, INPUT);
+
+  myservo.attach(11);
+  myservo.write(90);
+
+  lcd.write("Waiting for");
+  lcd.setCursor(0,1);
+  lcd.write("Confirmation");     
+  
 }
 void loop() { 
+  Serial3.flush();
+
+  if (connected == false){
+    while(Serial3.available() == 0) {
+      
+    }
+  }
+  connected = true;
+  RGB_color(255,0,0);
+  Serial3.readString();
+  Serial3.flush();
+
+  Serial.println("Hey");
+  Serial.println(Serial3.readString());
   
+  digitalWrite(trigPin, LOW);
+  delayMicroseconds(2);
+
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin, LOW);
+
+  duration = pulseIn(echoPin, HIGH);
+  distanceCm = duration / 29 / 2;
+  distanceInch = distanceCm * 0.393701;
+  lcd.clear();
+
+  String input = Serial3.readString();
+  Serial.println(input);
+  if (input != "Initialize") {
+    RGB_color(255,0,0);
+    int a = input.indexOf(',');
+    String position = input.substring(0, a);
+    String b = input.substring(a+1);
+    int c = b.indexOf(',');
+    String name1 = b.substring(0, c);
+    String d = b.substring(c+1);
+    int e = d.indexOf(',');
+    String pill = d.substring(0, e);
+    
+    Serial.println(position);
+    Serial.println(name1);
+    Serial.println(pill);
+    lcd.clear();
+    lcd.print("Name: ");
+    lcd.print(name1);
+    lcd.setCursor(0,1);
+    lcd.print("Pill: ");
+    lcd.print(pill);
+    if(position.toInt() == 1) {
+      myservo.write(0);
+      delay(10000);
+      myservo.write(90);
+    }
+    if (position.toInt() == 2) {
+      myservo.write(45);
+      delay(10000);
+      myservo.write(90);
+    }
+    if (position.toInt() == 3) {
+      myservo.write(135);
+      delay(10000);
+      myservo.write(90);
+    }
+    if (position.toInt() == 4) {
+      myservo.write(180);
+      delay(10000);
+      myservo.write(90);
+    }
+  }
+
   
-//  Serial3.flush();
-//
-//  if (connected == false){
-//    while(Serial3.available() == 0) {
-//      
-//    }
-//  }
-//  connected = true;
-//  RGB_color(255,0,0);
-//  
-//  Serial3.readString();
-//  Serial3.flush();
 //
 //  
 //  String input = Serial3.readString(); 
 //if (done == false) {
-//  testData();
-//  testData();
-//  testData();
+//  testinput();
+//  testinput();
+//  testinput();
 //  done = true;
 //  
-//}  
-  testData();
-  
+//}    
   //Serial.println(Serial3.readString());
   //Serial.println(input);
   
@@ -89,29 +168,6 @@ void RGB_color(int red_light_value, int green_light_value, int blue_light_value)
   analogWrite(blue_light_pin, blue_light_value);
  }
 //
-
-void testData() {
-  String data = "1600,Arya,Blue"; 
-  if (data != "Initialize") {
-    RGB_color(255,0,0);
-    int a = data.indexOf(',');
-    String position = data.substring(0, a);
-    String b = data.substring(a+1);
-    int c = b.indexOf(',');
-    String name1 = b.substring(0, c);
-    String d = b.substring(c+1);
-    int e = d.indexOf(',');
-    String pill = d.substring(0, e);
-    Serial.println(position);
-    Serial.println(name1);
-    Serial.println(pill);
-//    Serial.print(position.toInt());
-    TurnMotor(position.toInt()); 
-    lcd.print(name1);
-    lcd.setCursor(2,1);
-    lcd.print(pill);
-  }
-}
 
 void TurnMotor(int position) {
   int i;
