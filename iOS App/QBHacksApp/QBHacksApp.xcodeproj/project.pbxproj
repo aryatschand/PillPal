@@ -17,11 +17,13 @@
 		420941A123940FD400AB5051 /* BluetoothSerial.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4209419E23940FD400AB5051 /* BluetoothSerial.swift */; };
 		420941A223940FD400AB5051 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 4209419F23940FD400AB5051 /* MBProgressHUD.m */; };
 		420941A423940FEA00AB5051 /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420941A323940FEA00AB5051 /* ScannerViewController.swift */; };
-		420941A6239424CC00AB5051 /* ChooseRoleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420941A5239424CC00AB5051 /* ChooseRoleVC.swift */; };
+		420941A6239424CC00AB5051 /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420941A5239424CC00AB5051 /* SignIn.swift */; };
 		420941A8239425C900AB5051 /* RequestsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420941A7239425C900AB5051 /* RequestsTVC.swift */; };
 		420941AA239425DF00AB5051 /* VerifyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 420941A9239425DF00AB5051 /* VerifyVC.swift */; };
 		420941AC2394278200AB5051 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 420941AB2394278100AB5051 /* GoogleService-Info.plist */; };
 		420941AE2394602700AB5051 /* imageIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 420941AD2394602700AB5051 /* imageIcon.png */; };
+		429030062454D42B008E7F3D /* ScheduleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429030052454D42B008E7F3D /* ScheduleVC.swift */; };
+		429030082454E24F008E7F3D /* AutoPatientVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429030072454E24F008E7F3D /* AutoPatientVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,11 +40,14 @@
 		4209419F23940FD400AB5051 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		420941A023940FD400AB5051 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		420941A323940FEA00AB5051 /* ScannerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
-		420941A5239424CC00AB5051 /* ChooseRoleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChooseRoleVC.swift; sourceTree = "<group>"; };
+		420941A5239424CC00AB5051 /* SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
 		420941A7239425C900AB5051 /* RequestsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestsTVC.swift; sourceTree = "<group>"; };
 		420941A9239425DF00AB5051 /* VerifyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerifyVC.swift; sourceTree = "<group>"; };
 		420941AB2394278100AB5051 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		420941AD2394602700AB5051 /* imageIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = imageIcon.png; sourceTree = "<group>"; };
+		429030052454D42B008E7F3D /* ScheduleVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleVC.swift; sourceTree = "<group>"; };
+		429030072454E24F008E7F3D /* AutoPatientVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoPatientVC.swift; sourceTree = "<group>"; };
+		4290300A24563A9B008E7F3D /* PillPal.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PillPal.entitlements; sourceTree = "<group>"; };
 		8D640FD0351A68C9EB9987D4 /* Pods-QBHacksApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QBHacksApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-QBHacksApp/Pods-QBHacksApp.debug.xcconfig"; sourceTree = "<group>"; };
 		F7EA9884B1C3CA7EEF92F246 /* Pods-QBHacksApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-QBHacksApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-QBHacksApp/Pods-QBHacksApp.release.xcconfig"; sourceTree = "<group>"; };
 		F95703A5CE2C0C5D219D034D /* Pods_QBHacksApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_QBHacksApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,14 +95,17 @@
 				4209418B23940E7F00AB5051 /* SceneDelegate.swift */,
 				4209418D23940E7F00AB5051 /* PatientVC.swift */,
 				4209418F23940E7F00AB5051 /* Main.storyboard */,
+				429030072454E24F008E7F3D /* AutoPatientVC.swift */,
 				420941A7239425C900AB5051 /* RequestsTVC.swift */,
 				420941A9239425DF00AB5051 /* VerifyVC.swift */,
-				420941A5239424CC00AB5051 /* ChooseRoleVC.swift */,
+				420941A5239424CC00AB5051 /* SignIn.swift */,
+				429030052454D42B008E7F3D /* ScheduleVC.swift */,
 				4209419223940E8100AB5051 /* Assets.xcassets */,
 				4209419423940E8100AB5051 /* LaunchScreen.storyboard */,
 				4209419723940E8100AB5051 /* Info.plist */,
 				420941AB2394278100AB5051 /* GoogleService-Info.plist */,
 				4209419D23940FD300AB5051 /* QBHacksApp-Bridging-Header.h */,
+				4290300A24563A9B008E7F3D /* PillPal.entitlements */,
 			);
 			path = QBHacksApp;
 			sourceTree = "<group>";
@@ -240,9 +248,11 @@
 			files = (
 				4209418E23940E7F00AB5051 /* PatientVC.swift in Sources */,
 				420941A423940FEA00AB5051 /* ScannerViewController.swift in Sources */,
-				420941A6239424CC00AB5051 /* ChooseRoleVC.swift in Sources */,
+				429030082454E24F008E7F3D /* AutoPatientVC.swift in Sources */,
+				420941A6239424CC00AB5051 /* SignIn.swift in Sources */,
 				4209418A23940E7F00AB5051 /* AppDelegate.swift in Sources */,
 				420941AA239425DF00AB5051 /* VerifyVC.swift in Sources */,
+				429030062454D42B008E7F3D /* ScheduleVC.swift in Sources */,
 				420941A223940FD400AB5051 /* MBProgressHUD.m in Sources */,
 				420941A8239425C900AB5051 /* RequestsTVC.swift in Sources */,
 				420941A123940FD400AB5051 /* BluetoothSerial.swift in Sources */,
@@ -392,7 +402,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = QBHacksApp/PillPal.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = BMPVP9B9U3;
 				INFOPLIST_FILE = QBHacksApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -400,7 +412,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = arya.QBHacksApp;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = arya.pillpal;
 				PRODUCT_NAME = PillPal;
 				SWIFT_OBJC_BRIDGING_HEADER = "QBHacksApp/QBHacksApp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -415,7 +428,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = QBHacksApp/PillPal.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = BMPVP9B9U3;
 				INFOPLIST_FILE = QBHacksApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -423,7 +438,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = arya.QBHacksApp;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = arya.pillpal;
 				PRODUCT_NAME = PillPal;
 				SWIFT_OBJC_BRIDGING_HEADER = "QBHacksApp/QBHacksApp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

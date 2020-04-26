@@ -7,13 +7,13 @@
 //
 
 import UIKit
-import CoreBluetooth
-import QuartzCore
 import Firebase
+import FirebaseDatabase
 import LocalAuthentication
+import AVFoundation
 
 
-class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate, UIPickerViewDataSource {
+class PatientVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
@@ -29,17 +29,37 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
     
     @IBOutlet weak var PickerView: UIPickerView!
     
-    var nameArray = ["Arya", "Albert", "Eli", "Sai"]
+    var nameArray: [String] = []
     var ref: DatabaseReference!
     var redPositions: [Int] = []
     var bluePositions: [Int] = []
     var doctors: [String] = []
+    var name = "Arya Tschand"
+    let synthesizer = AVSpeechSynthesizer()
+    
+    var manual = false
     
     var verified = false
     
-    var selectedName = "Arya"
+    var selectedName: String = ""
     
-    func checkVerified(CompletionHandler: @escaping (Bool?, Error?) -> Void){
+    override func viewWillAppear(_ animated: Bool) {
+        getData() {
+            (returnval, error) in
+            if (returnval)!
+            {
+                DispatchQueue.main.async {
+                    self.PickerView.reloadAllComponents()
+                }
+            } else {
+                print(error)
+            }
+        }
+        DispatchQueue.main.async { // Correct
+        }
+    }
+    
+    func getData(CompletionHandler: @escaping (Bool?, Error?) -> Void){
            do {
                let url = NSURL(string: "https://h2grow.herokuapp.com/api")!
                let request = NSMutableURLRequest(url: url as URL)
@@ -49,20 +69,26 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
                request.httpBody = try JSONSerialization.data(withJSONObject: [""], options: .prettyPrinted)
                let task = URLSession.shared.dataTask(with: request as URLRequest){ data, response, error in
                    
-                   self.ref.child("Requests").child("Arya").child("Doctors").observeSingleEvent(of: .value, with: { (snapshot) in
-                       
-                       // Get user value
-                       
+                self.ref.child("Patients").child(self.name).observeSingleEvent(of: .value, with: { (snapshot) in
                        let value = snapshot.value as? NSDictionary
-                       
                        for (key, values) in value! {
-                        self.doctors.append(key as! String)
+                        if key as? String == "pills"{
+                            let separatestring = values as? String
+                            var temparr = separatestring!.components(separatedBy: ",")
+                            if temparr.count > 0 {
+                                self.nameArray = []
+                                for x in 0...temparr.count-1{
+                                    if temparr[x] != "" && temparr[x] != " "{
+                                        self.nameArray.append(temparr[x])
+                                    }
+                                }
+                            }
+                            
+                        }
 
-                           if values as! Bool == true {
-                            self.verified = true
-                           }
                        }
                        CompletionHandler(true,nil)
+                       
                    })
     
                    
@@ -74,38 +100,21 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
        }
     
     
-    func textViewScrollToBottom() {
-        //let range = NSMakeRange(NSString(string: mainTextView.text).length - 1, 1)
-        //mainTextView.scrollRangeToVisible(range)
-    }
-    
-    func serialDidDisconnect(_ peripheral: CBPeripheral, error: NSError?) {
-        reloadView()
-        let hud = MBProgressHUD.showAdded(to: view, animated: true)
-        hud?.mode = MBProgressHUDMode.text
-        hud?.labelText = "Disconnected"
-        hud?.hide(true, afterDelay: 1.0)
-    }
-    
-    func serialDidChangeState() {
-        reloadView()
-        if serial.centralManager.state != .poweredOn {
-            let hud = MBProgressHUD.showAdded(to: view, animated: true)
-            hud?.mode = MBProgressHUDMode.text
-            hud?.labelText = "Bluetooth turned off"
-            hud?.hide(true, afterDelay: 1.0)
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if nameArray.count >= 1 {
+            selectedName = nameArray[row]
+
         }
     }
     
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedName = nameArray[row]
+    override func viewWillDisappear(_ animated: Bool) {
+        synthesizer.stopSpeaking(at: AVSpeechBoundary.immediate)
     }
     
     
     @IBOutlet weak var StatusLabel: UILabel!
     
     @IBAction func SendInfo(_ sender: Any) {
-        //serial.sendMessageToDevice("1600,Arya,Blue")
         
         let myContext = LAContext()
         let myLocalizedReasonString = "Biometric Authntication testing !! "
@@ -118,7 +127,16 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
                     DispatchQueue.main.async {
                         if success {
                             // User authenticated successfully, take appropriate action
-                            self.ref.child("Requests").child(self.selectedName).child("Requested").setValue(true)
+                            if self.selectedName == "" {
+                                self.selectedName = self.nameArray[0]
+                            }
+                            self.ref.child("Patients").child(self.name).child("requested").setValue(self.selectedName)
+                            self.ref.child("Patients").child(self.name).child("fulfilled").setValue("waiting approval")
+                            self.StatusLabel.text = "Requested Pill - \(self.selectedName)"
+                            if self.manual == true {
+                                self.manual = false
+                                _ = self.navigationController?.popViewController(animated: true)
+                            }
                         } else {
                             // User did not authenticate successfully, look at error and take appropriate action
                             print("Sorry!!... User did not authenticate successfully")
@@ -130,114 +148,36 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
                 print("Sorry!!.. Could not evaluate policy.")
             }
         } else {
-            // Fallback on earlier versions
-            
-            print("Ooops!!.. This feature is not supported.")
+             if self.selectedName == "" {
+                 self.selectedName = self.nameArray[0]
+             }
+             self.ref.child("Patients").child(self.name).child("requested").setValue(self.selectedName)
+             self.ref.child("Patients").child(self.name).child("fulfilled").setValue("waiting approval")
+             self.StatusLabel.text = "Requested Pill - \(self.selectedName)"
+             if self.manual == true {
+                 self.manual = false
+                 _ = self.navigationController?.popViewController(animated: true)
+             }
         }
     }
     
     @IBOutlet weak var SendBtn: UIButton!
     
-    @IBOutlet weak var Connect: UIBarButtonItem!
-    
-    func loadArrays() {
-        
-        self.ref.child("Positions").child("Red").observeSingleEvent(of: .value, with: { (snapshot) in
-            
-            // Get user value
-            
-            let value = snapshot.value as? NSDictionary
-            
-            for (key, values) in value! {
-                if values as! Bool == true{
-                    var str = key as! String
-                    var lastInt = Int(String(str[str.index(before: str.endIndex)]))
-                    self.redPositions.append(lastInt!)
-                }
-            }
-        })
-            
-            self.ref.child("Positions").child("Blue").observeSingleEvent(of: .value, with: { (snapshot) in
-            
-            // Get user value
-            
-            let value = snapshot.value as? NSDictionary
-            
-            for (key, values) in value! {
-                if values as! Bool == true{
-                    var str = key as! String
-                    var lastInt = Int(String(str[str.index(before: str.endIndex)]))
-                    self.bluePositions.append(lastInt!)
-                }
-            }
-        })
-        
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = Database.database().reference()
-        serial = BluetoothSerial(delegate: self)
-        loadArrays()
         self.PickerView.delegate = self
         self.PickerView.dataSource = self
         
         // UI
         //mainTextView.text = ""
-        reloadView()
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(PatientVC.reloadView), name: NSNotification.Name(rawValue: "reloadStartViewController"), object: nil)
+        let utterance = AVSpeechUtterance(string: "Please select the desired medication that you want to request for. When you click the request button, move your face in front of the camera for Face ID authentication and your medicine will be sent for review.")
+        utterance.voice = AVSpeechSynthesisVoice(language: "en-US")
+        utterance.rate = 0.5
+
+        synthesizer.speak(utterance)
     }
     
-    @IBAction func ConnectBtn(_ sender: Any) {
-        if serial.connectedPeripheral == nil {
-            performSegue(withIdentifier: "ShowScanner", sender: self)
-        } else {
-            serial.disconnect()
-            reloadView()
-        }
-    }
-    
-    
-    
-    @IBAction func Refresh(_ sender: Any) {
-        checkVerified() {
-            (returnval, error) in
-            if (returnval)!
-            {
-                DispatchQueue.main.async {
-                    if self.verified == true {
-                        self.StatusLabel.text = "Request Status - Accepted"
-                        var pillName = ""
-                        var position = 0
-                        if self.selectedName == "Arya" {
-                            pillName = "Blue"
-                            if self.bluePositions.count > 0{
-                                position = self.bluePositions[0]
-                                self.bluePositions.remove(at: 0)
-                            }
-                        } else {
-                            pillName = "Red"
-                            if self.redPositions.count > 0{
-                                position = self.redPositions[0]
-                                self.redPositions.remove(at: 0)
-                            }
-                        }
-                    serial.sendMessageToDevice("\(position),\(self.selectedName),\(pillName)")
-                    self.ref.child("Requests").child(self.selectedName).child("Requested").setValue(false)
-                        for x in 0...self.doctors.count-1{
-                            self.ref.child("Requests").child(self.selectedName).child("Doctors").child(self.doctors[x]).setValue(false)
-                        }
-                        
-                    }
-                }
-            } else {
-                print(error)
-            }
-        }
-        DispatchQueue.main.async { // Correct
-        }
-    }
     
     deinit {
         NotificationCenter.default.removeObserver(self)
@@ -270,25 +210,6 @@ class PatientVC: UIViewController, BluetoothSerialDelegate, UIPickerViewDelegate
         }
     } */
     
-    @objc func reloadView() {
-        // in case we're the visible view again
-        if serial.isReady {
-            Connect.title = "Disconnect"
-            Connect.tintColor = UIColor.red
-            Connect.isEnabled = true
-            serial.sendMessageToDevice("initialize")
-        } else if serial.centralManager.state == .poweredOn {
-            Connect.title = "Connect"
-            Connect.tintColor = view.tintColor
-            Connect.isEnabled = true
-            serial.sendMessageToDevice("DISCONNECT")
-        } else {
-            Connect.title = "Connect"
-            Connect.tintColor = view.tintColor
-            Connect.isEnabled = false
-            serial.sendMessageToDevice("DISCONNECT")
-        }
-    }
     
 }
 

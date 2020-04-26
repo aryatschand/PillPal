@@ -20,7 +20,9 @@ class VerifyVC: UIViewController {
     
     @IBAction func YesClick(_ sender: Any) {
         print(name)
-        self.ref.child("Requests").child(name).child("Doctors").child("Eli").setValue(true)
+        self.ref.child("Patients").child(name).child("fulfilled").setValue("false")
+        _ = navigationController?.popViewController(animated: true)
+
     }
     
     @IBAction func NoClick(_ sender: Any) {
@@ -32,6 +34,17 @@ class VerifyVC: UIViewController {
         NameLabel.text = "Patient Name - \(name)"
         PillLabel.text = "Pill Requested - \(pill)"
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
+        if segue.identifier == "clickschedule" {
+            let ScheduleVC = segue.destination as! ScheduleVC
+            ScheduleVC.name = name
+        }
+    }
+    
+    
 
     /*
     // MARK: - Navigation

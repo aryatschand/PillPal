@@ -22,10 +22,14 @@ class RequestsTVC: UITableViewController {
         refreshScreen()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        refreshScreen()
+        tableView.reloadData()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         ref = Database.database().reference()
-        refreshScreen()
     }
     
     func refreshScreen() {
@@ -54,18 +58,22 @@ class RequestsTVC: UITableViewController {
             request.httpBody = try JSONSerialization.data(withJSONObject: [""], options: .prettyPrinted)
             let task = URLSession.shared.dataTask(with: request as URLRequest){ data, response, error in
                 
-                self.ref.child("Requests").observeSingleEvent(of: .value, with: { (snapshot) in
-                    
+                self.ref.child("Patients").observeSingleEvent(of: .value, with: { (snapshot) in
+                    self.names = []
+                    self.pills = []
+                    self.labels = []
                     let value = snapshot.value as? NSDictionary
                     for (key, values) in value! {
-                        var verify = (values as! NSDictionary)["Requested"] as! Bool
-                        if verify == true && self.names.contains(key as! String) == false{
-                            var name = key as! String
-                            var pill = (values as! NSDictionary)["Type"] as! String
-                            self.names.append(name)
-                            self.pills.append(pill)
-                            self.labels.append("\(name) - \(pill)")
+                        var verify = (values as! NSDictionary)["fulfilled"] as! String
+                        var name = key as! String
+                        var pill = "No Pill Requested"
+                        if verify == "waiting approval" {
+                            pill = (values as! NSDictionary)["requested"] as! String
                         }
+                        
+                        self.names.append(name)
+                        self.pills.append(pill)
+                        self.labels.append("\(name) - \(pill)")
                     }
                     CompletionHandler(true,nil)
                     
@@ -97,6 +105,14 @@ class RequestsTVC: UITableViewController {
 
         cell.textLabel?.text = labels[indexPath.row]
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if pills[indexPath.row] == "No Pill Requested"{
+            self.performSegue(withIdentifier: "tableschedule", sender: self)
+        } else {
+            self.performSegue(withIdentifier: "confirm", sender: self)
+        }
     }
     
     
@@ -143,11 +159,15 @@ class RequestsTVC: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
-        if segue.identifier == "Select" {
+        if segue.identifier == "confirm" {
             let VerifyVC = segue.destination as! VerifyVC
             var selectedIndexPath = tableView.indexPathForSelectedRow
             VerifyVC.name = names[selectedIndexPath!.row]
             VerifyVC.pill = pills[selectedIndexPath!.row]
+        } else {
+            let ScheduleVC = segue.destination as! ScheduleVC
+            var selectedIndexPath = tableView.indexPathForSelectedRow
+            ScheduleVC.name = names[selectedIndexPath!.row]
         }
     }
     
