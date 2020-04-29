@@ -134,7 +134,7 @@ class ScheduleVC: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource
             let tosend = dateFormatter.string(from: datepicker.date)
             print(tosend)
             
-            let url = NSURL(string: "https://bb56fb9c.ngrok.io/iphone/newschedule")!
+            let url = NSURL(string: "https://2dd6e7b6.ngrok.io/iphone/newschedule")!
             let request = NSMutableURLRequest(url: url as URL)
             request.httpMethod = "POST"
             request.setValue(tosend, forHTTPHeaderField: "date")
